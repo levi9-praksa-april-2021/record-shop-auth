@@ -17,6 +17,7 @@
 		<java.version>11</java.version>
 		<org.lombok.version>1.18.20</org.lombok.version>
 		<org.liquibase.version>4.3.3</org.liquibase.version>
+		<spring-cloud.version>2020.0.0</spring-cloud.version>
 		<diffChangeLogFile>src/main/resources/db/changelog/to-be-changed.yaml</diffChangeLogFile>
 	</properties>
 	<dependencies>
@@ -32,6 +33,12 @@
 			<groupId>org.springframework.security.experimental</groupId>
 			<artifactId>spring-security-oauth2-authorization-server</artifactId>
 			<version>0.1.0</version>
+		</dependency>
+
+		<!-- Spring Cloud -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
 
 		<dependency>
@@ -76,6 +83,18 @@
 			<version>6.0.13.Final</version>
 		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
