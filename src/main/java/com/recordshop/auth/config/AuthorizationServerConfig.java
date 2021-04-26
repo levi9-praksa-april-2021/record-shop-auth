@@ -4,6 +4,7 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -27,22 +28,30 @@ import java.util.UUID;
 @Configuration(proxyBeanMethods = false)
 @Import(OAuth2AuthorizationServerConfiguration.class)
 public class AuthorizationServerConfig {
+
+    @Value("${auth.oauth.client-id}")
+    private String clientId;
+
+    @Value("${auth.oauth.client-secret}")
+    private String clientSecret;
+
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
         RegisteredClient registeredClient =
                 RegisteredClient.withId(UUID.randomUUID().toString())
-                 .clientId("record-shop-client")
-               .clientSecret("record-shop-secret")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
+                        .clientId(clientId)
+                        .clientSecret(clientSecret)
+                        .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
                         .clientAuthenticationMethod(ClientAuthenticationMethod.POST)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                         .tokenSettings(tokenSettings -> tokenSettings.accessTokenTimeToLive(Duration.ofDays(1)))
-                .redirectUri("http://localhost:4200/")
-                .scope(OidcScopes.OPENID)
-                .scope("catalog.read")
+                        .redirectUri("http://localhost:4200/")
+                        .scope(OidcScopes.OPENID)
+                        .scope("catalog.read")
+                        .scope("catalog.write")
                         .scope("cart.write")
-                .build();
+                        .build();
         return new InMemoryRegisteredClientRepository(registeredClient);
     }
 
