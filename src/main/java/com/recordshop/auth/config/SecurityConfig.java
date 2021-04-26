@@ -35,7 +35,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authenticationProvider(authProvider())
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                         .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .anyRequest().authenticated().and().formLogin(Customizer.withDefaults())
