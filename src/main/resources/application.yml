@@ -4,32 +4,59 @@ server:
 spring:
   application:
     name: record-shop-auth
-  config:
-    import: optional:configserver:http://localhost:8888/
-  datasource:
-    url: ${auth.datasource.url}
-    username: ${auth.datasource.username}
-    password: ${auth.datasource.password}
-    initialization-mode: always
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: none
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://127.0.0.1:9000
-
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: optional:configserver:http://localhost:8888/
+  datasource:
+    url: ${auth.datasource.url}
+    username: ${auth.datasource.username}
+    password: ${auth.datasource.password}
+    initialization-mode: always
+  cloud:
+    kubernetes:
+      discovery:
+        enabled: false
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: record-shop-auth
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+auth:
+  oauth:
+    issuer-uri: http://127.0.0.1:9000
+---
+spring:
+  config:
+    activate:
+      on-profile: kubernetes
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+        mode: polling
+        period: 1000
+auth:
+  oauth:
+    issuer-uri: http://record-shop-auth:9000
+eureka:
+  client:
+    enabled: false
+    service-url:
+      registerWithEureka: false
