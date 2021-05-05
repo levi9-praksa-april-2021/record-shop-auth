@@ -31,8 +31,8 @@ public class RecordShopAuthApplication {
 
 			Role user = roleRepository.findByName("ROLE_USER");
 			if (user == null)
-				roleRepository.save(new Role(null, "ROLE_ADMIN"));
-			Role admin = roleRepository.findByName("ROLE_USER");
+				roleRepository.save(new Role(null, "ROLE_USER"));
+			Role admin = roleRepository.findByName("ROLE_ADMIN");
 			if (admin == null)
 				admin = roleRepository.save(new Role(null, "ROLE_ADMIN"));
 			Optional<User> admin1 = userRepository.findByEmail("admin@gmail.com");
